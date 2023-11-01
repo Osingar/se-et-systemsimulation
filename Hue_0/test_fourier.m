@@ -21,9 +21,9 @@
 %
 % Datum:    19.10.2023
 %
-% Änderung: 
+% Änderung: 25.10.2023 - Überarbeitung nach Anmerkungen von H.Rumpf
 %
-% Benötigte eingene externe functions: fourier_series_02.m
+% Benötigte eigene externe functions: fourier_series_02.m
 %
 % siehe auch: 
 %
@@ -131,10 +131,9 @@ c = [a0/2 abs(A .* sqrt(a.^2 + b.^2))];
 
 % Darstellen der Plots
 figure;                         % Erzeugen eines Fensters
-tiledlayout(2,1);               % Initialisieren des Layouts
 
 % Funktionswerte darstellen
-nexttile;                       % Nächste Layoutposition
+subplot(2,1,1);                 % Layoutposition
 plot(t,y);                      % Darstellen der Werte
 title(plot_title);              % Diagrammtitel
 xlim([t_start,t_ende]);         % x-Achse begrenzen
@@ -142,7 +141,7 @@ xlabel("t[s]");                 % Beschriftung x-Achse
 ylabel("f(t) fourier-series");  % Beschriftung y-Achse
 
 % Amplitudenspektrum darstellen
-nexttile;                       % Nächste Layoutposition
+subplot(2,1,2);                 % Layoutposition
 stem(0:N_C-1,c(1,1:N_C));       % Darstellen der Werte
 xlabel("n[-]");                 % Beschriftung x-Achse
 ylabel("|A|");                  % Beschriftung y-Achse
