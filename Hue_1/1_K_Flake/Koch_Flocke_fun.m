@@ -1,17 +1,39 @@
+% m-file: 
 %
-function [x,y]=Koch_Flocke_fun(punkte, maxtiefe, tiefe, startpunkte)
+% Erklärung
+%
+% 
+% 
+% Input:   
+% Output:   
+%
+% Beispiel:
+%
+% Autor   :	Leon Knauf
+%
+% Datum:    26.10.2023
+%
+% Änderung: 
+%
+% Benötigte eigene externe functions:
+%
+% siehe auch: 
+%
+%--------------------------------------------------------------------------  
 
-% Anzahl der Argumente prüfen
+function [x,y]=Koch_Flocke_fun(punkte, maxtiefe, tiefe)
+
+% Anzahl der Argumente prüfen, bei weniger als 3 Argumenten muss dies die
+% erste Instanz der Funktion sein. Also muss die Starttiefe gesetzt werden.
 if (nargin() < 3)
     tiefe = 1;
-    startpunkte = punkte;
 end
 
 % Anzahl aktueller Punkte bestimmen
 num_punkte = size(punkte,2);
 
-% Anzahl Punkte der Grundgeometrie bestimmen
-num_startpunkte = size(startpunkte,2);
+% Anzahl Punkte der Grundgeometrie setzen
+num_startpunkte = 4;
 
 % Anzahl neuer Punkte bestimmen
 num_neue_punkte = num_startpunkte * (num_punkte - 1) + 1;
@@ -21,19 +43,20 @@ neue_punkte = zeros(2,num_neue_punkte);
 
 % Alle bestehenden Punkte durchlaufen
 for i=1:num_punkte
+
     % Neuen Index bestimmen
     idx = (i-1)*(num_startpunkte-1)+i;
 
     % Punkt in die neue Matrix kopieren
     neue_punkte(:,idx) = punkte(:,i);
 
-    % Neue Punkte generieren
+    % Für den letzten Punkt keine neuen Punkte mehr generieren
     if i<num_punkte
 
-        % Erster neuer punkt
+        % Ersten neuen Punkt berechnen
         p1 = punkte(:,i) + (punkte(:,i+1) - punkte(:,i))/3;
         
-        % Letzter neuer punkt
+        % Letzten neuen Punkt berechnen
         p3 = punkte(:,i+1) - (punkte(:,i+1) - punkte(:,i))/3;
         
         % Mittleren neuen Punkt berechnen
@@ -50,8 +73,12 @@ end
 
 % Abbruchbedingung der Rekursion
 if tiefe < maxtiefe
-    [x,y] = Koch_Flocke_fun(neue_punkte,maxtiefe,tiefe+1,startpunkte);
+
+    % Funktion erneut mit nächster Tiefe aufrufen
+    [x,y] = Koch_Flocke_fun(neue_punkte,maxtiefe,tiefe+1);
 else
+
+    % Maxmiale Tiefe erreicht, Punkte zurückgeben
     x = neue_punkte(1,:);
     y = neue_punkte(2,:);
 end
