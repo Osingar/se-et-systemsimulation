@@ -1,13 +1,20 @@
-% m-file: 
+% m-file: Koch_Flocke_fun.m
 %
 % Erklärung
 %
+% Diese Funktion berechnet die Punkte einer Kochschen Schneeflocke mittels
+% rekursiver Aufrufe.
 % 
-% 
-% Input:   
-% Output:   
+% Input:    punkte: Matrix bestehend aus x und y Werten der Punkte
+%           maxtiefe: maximale Tiefe der Rekursion
+%           tiefe: optional, wird nur ab dem ersten rekursiven Aufruf
+%                  benötigt.
+% Output:   x,y: Punkte der bis Maxtiefe ausgerechneten Koch'schen
+%                Schneeflocke.
 %
-% Beispiel:
+% Beispiel: punkte=[-5 0 5 -5;  0 sqrt(75) 0 0];
+%           tiefe=7;        
+%           Koch_Flocke_fun(punkte, tiefe) 
 %
 % Autor   :	Leon Knauf
 %
