@@ -96,7 +96,7 @@ for param_set = 1:num_parameters            % Hauptprogramm-Schleife ueber angeg
 
     %===== Berechnung angenaeherte U_Last-Verlaufsersatz-Funktion mittels fminsearch ===== 
     
-    p=fminsearch(@VoltageCurve_f_min_fun,p0,[],t,U_Last');      % Auruf fminsearch
+    p=fminsearch(@VoltageCurve_f_min_fun,p0,[],t,U_Last');      % Aufruf fminsearch
 
     % Auslesen ermittelter Parameter
     c1 = p(1);
@@ -105,7 +105,7 @@ for param_set = 1:num_parameters            % Hauptprogramm-Schleife ueber angeg
     c4 = p(4);
 
     % Berechnung der Funktionswerte mittels der ermittelten Parameter
-    U_Last_est = c1 * exp(c2*t)+c3*exp(c4*t);                   % ULastEst  [V]
+    U_Last_est = c1 * exp(c2*t)+c3*exp(c4*t);                   % U_Last_est  [V]
     
     %================
 
