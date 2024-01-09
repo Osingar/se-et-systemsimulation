@@ -1,45 +1,56 @@
 % m-file: IR_Comp.m
 %
-% Header fuer Hausuebung Nr.3 "Motor mit IR-Kompensation"
 %
-% Erklaerung:
+% HUE 3
+%
+% Erklaerung
+%
 % File zur dynamischen Betrachtung der Motordrehzahl eines DC-Motors mit
 % IR-Kompensation bei Verwendung unterschiedlicher Verstaerkungsfaktoren.
 %
-% Eingabe:  Systemparameter
+% Input:    Systemparameter
 %           - Motorparameter
+%           - Simulationsparameter
 %           - beschreibende Systemparameter
 %           - Stoergroessen
 %           - Eingangsgroessen
 %           - Simulationszeit
 %           - Anfangsbedingung
 %
-% Ausgabe:  Grafische Darstellung des Drehzahl-Verlaufs mit
+% Output:   Grafische Darstellung des Drehzahl-Verlaufs mit
 %           7 Kompensationswerten
 %
-% Beispiel: xxx
+% Autor:    Marvin Mueller (5273308)
 %
-% Autor:
+%           Dieser m-File wurde im Rahmen der Vorlesung Strukturelle und
+%           funktionale Systemsimulation WS 2023/2024 erstellt.
 %
-% Datum:
+% Datum:    2024-01-09
 % 
-% Aenderung:
+% Aenderung: xxx
 %
-% Benoetigte eigene externe Funktionen:
+% Benoetigte eigene externe functions: xxx
 %
-% siehe auch:
+% siehe auch: ode45
 %
 %--------------------------------------------------------------------------
-clearvars;                                      % Alle Plots schliessen
-close all;                                      % Workspace loeschen
 
-%% Systemparameter
+%===== Initialisierung =====
+
+clearvars;                                      % Noch geoeffnete Plots schließen
+close all;                                      % Variablenspeicher leeren
+
+%================
+
+%===== Systemparameter =====
 
 % Motorparameter
-Psi=15e-3;                                      % Verketteter Fluss                         [Vs]
 Ra=10;                                          % Ankerwiderstand                           [Ohm]
 La=10e-3;                                       % Ankerinduktivitaet                        [H]
+Psi=15e-3;                                      % Verketteter Fluss                         [Vs]
 J=5e-7;                                         % Massentraegheitsmoment                    [kgm^2]
+
+% Simulationsparameter
 
 k_var=[0 0.5 sqrt(2)/2 0.8 0.9 0.97 1.0];       % Variation der Kompensationswerte
 k=k_var*Ra;                                     % Proportionaler Verstaerkungsfaktor        [Ohm]
@@ -73,7 +84,10 @@ Al_0=0;                                         % Anfangswinkelbeschleunigung   
 w_0=0;                                          % Winkelgeschwindigkeit                     [1/s]
 y0= [Al_0 0*w_0]';                              % Anfangsbedingung in einer Matrix
 
-%% Einstellungen fuer ode45-Funktion zur Loesung der DGL 2. Ordnung mit Hilfe zweier DGL 1. Ordnung
+%================
+
+%===== Berechnung Funktionswerte mittels ode45 =====
+
 al=zeros(Nt,N_k);                               % Anlegen eines Arrays fuer die Beschleunigung
 n=zeros(Nt,N_k);                                % Anlegen eines Arrays fuer die Drehzahl
 
@@ -88,7 +102,10 @@ for i=1:1:N_k
     n(:,i)=y2(:,2)*60/(2*pi);                   % Drehzahl                                  [1/min]
 end
 
-% Darstellung der Graphen
+%================
+
+%===== Visualisierung =====
+
 figure
 plot(t*1e3,n)                                   % Darstellung der Funktion n(t)
 xlabel('t [ms]')                                % Beschriftung der x-Achse
@@ -98,9 +115,10 @@ lgd=legend('0', '0.5', '0.707', '0.8', '0.9', '0.97', '1.0');   % Legende fuer d
 title(lgd,sprintf('Variation der\nKompensationswerte'))         % Titelangabe der Legende
 grid                                            % Rasterlinien darstellen
 
+%================
 
+%===== function dgl_Motor_c =====
 
-%% function dgl_Motor_c
 function Yp=dgl_Motor_c(~,y, Ua_0, R_A, L_A, k, Psi, J, M_L, dM_last_dt)
 
     % System-Matrix:
@@ -111,11 +129,13 @@ function Yp=dgl_Motor_c(~,y, Ua_0, R_A, L_A, k, Psi, J, M_L, dM_last_dt)
     k2 = Psi^2/(L_A*J);                         % Berechnung Faktor k2
     R = (Psi/(L_A * J))*Ua_0-(((R_A-k)/(L_A*J))*M_L+dM_last_dt/J);  % Berechnung Faktor R
 
-    % Ueberfuehrung von k1, k2 sowie R in die System Matrix
+    %===== Ueberfuehrung von k1, k2, R in die System Matrix =====
     A = [-k1 -k2; 1 0];                         % System-Matrix A
     b=[R; 0];                                   % System-Matrix b
 
-    % Bildung des DGL-Systems
+    %===== Bildung des DGL-Systems + Rueckgabe Ergebnisse =====
     Yp=A*y+b;                                   % Yp=[a' n']
 
 end
+
+%================
